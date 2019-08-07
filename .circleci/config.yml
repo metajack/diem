@@ -37,29 +37,6 @@ jobs:
           name: Linting
           command: |
             ./scripts/nightly_features.sh
-            ./scripts/clippy.sh
-            cargo fmt -- --check
-      - run:
-          name: Build All Targets
-          command: RUST_BACKTRACE=1 cargo build -j 16 --all --all-targets
-      - run:
-          name: Run All Unit Tests
-          command: RUST_BACKTRACE=1 cargo test --all --exclude testsuite
-      - run:
-          name: Run All End to End Tests
-          command: RUST_BACKTRACE=1 cargo test --package testsuite
-  audit:
-    docker:
-      - image: circleci/rust:stretch
-    resource_class: xlarge
-    steps:
-      - env_setup
-      - run:
-          name: Cargo Audit
-          command: |
-            cargo install --force cargo-audit
-            cargo generate-lockfile
-            cargo audit
   terraform:
     docker:
       - image: hashicorp/terraform
@@ -80,13 +57,3 @@ workflows:
     jobs:
       - build
       - terraform
-
-  scheduled-workflow:
-    triggers:
-      - schedule:
-          cron: "14 14 * * *"
-          filters:
-            branches:
-              only: master
-    jobs:
-      - audit
