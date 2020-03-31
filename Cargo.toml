@@ -124,3 +124,6 @@ lto = 'thin'
 
 [profile.bench]
 debug = true
+
+[patch.'https://github.com/tikv/rust-rocksdb']
+rocksdb = { git = 'https://github.com/metajack/rust-rocksdb', branch = 'dynamic-link' }
